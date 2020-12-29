@@ -1,0 +1,21 @@
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "${NAME}"
+  url = "${HOST}"
+  token = "${REGISTRATION_TOKEN}"
+  executor = "kubernetes"
+  [runners.kubernetes]
+      namespace = "${NAMESPACE}"
+      privileged = true
+      poll_timeout = 600
+      cpu_request = "1"
+      service_cpu_request = "200m"
+      [[runners.kubernetes.volumes.host_path]]
+          name = "docker"
+          mount_path = "/var/run/docker.sock"
+          host_path = "/var/run/docker.sock"
