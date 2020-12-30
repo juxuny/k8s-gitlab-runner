@@ -14,7 +14,7 @@ check_interval = 0
       privileged = true
       poll_timeout = 600
       cpu_request = "1"
-      service_cpu_request = "200m"
+      service_cpu_request = "100m"
       [[runners.kubernetes.volumes.host_path]]
           name = "docker"
           mount_path = "/var/run/docker.sock"
