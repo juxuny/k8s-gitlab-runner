@@ -33,6 +33,9 @@ func doGet(api string, out interface{}) error {
 	if err != nil {
 		return fmt.Errorf("request faild: " + err.Error())
 	}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("request failed, http status:%v", resp.Status)
+	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return fmt.Errorf("request faild: " + err.Error())
@@ -52,6 +55,9 @@ func doDelete(api string, out interface{}) error {
 	if err != nil {
 		return fmt.Errorf("request faild: " + err.Error())
 	}
+	if resp.StatusCode/100 != 2 {
+		return fmt.Errorf("request failed, http status:%v", resp.Status)
+	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return fmt.Errorf("request faild: " + err.Error())
@@ -59,7 +65,10 @@ func doDelete(api string, out interface{}) error {
 	if len(data) == 0 && resp.StatusCode == http.StatusOK {
 		return nil
 	}
-	return json.Unmarshal(data, out)
+	if len(data) > 0 {
+		return json.Unmarshal(data, out)
+	}
+	return nil
 }
 
 func parse() {
@@ -95,11 +104,12 @@ func main() {
 
 	// doGet all runners
 	var runners Runners
-	if err := doGet(genApi("/api/v4/runners/all"), &runners); err != nil {
+	if err := doGet(genApi("/api/v4/runners"), &runners); err != nil {
 		exit("doGet all runners failed: " + err.Error())
 		return
 	}
 	runners = runners.Filter(func(r Runner, index int) bool {
+		fmt.Println(r.Id, r.Description, r.Status)
 		return r.Description == runnerName
 	})
 	if len(runners) == 0 {
@@ -108,6 +118,7 @@ func main() {
 	}
 	fmt.Println("remove duplicated runner")
 	for _, runner := range runners {
+		fmt.Println("remove: ", runner.Id, runner.Description)
 		var out interface{}
 		if err := doDelete(genApi(fmt.Sprintf("/api/v4/runners/%d", runner.Id)), &out); err != nil {
 			exit("delete duplicated runner failed:" + err.Error())
