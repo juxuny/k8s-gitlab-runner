@@ -1,4 +1,4 @@
-concurrent = 1
+concurrent = 2
 check_interval = 0
 
 [session_server]
@@ -11,7 +11,7 @@ check_interval = 0
   executor = "kubernetes"
   [runners.kubernetes]
       namespace = "${NAMESPACE}"
-      privileged = true
+      privileged = false
       poll_timeout = 600
       cpu_request = "1"
       service_cpu_request = "100m"
