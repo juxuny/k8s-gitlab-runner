@@ -104,7 +104,7 @@ func main() {
 
 	// doGet all runners
 	var runners Runners
-	if err := doGet(genApi("/api/v4/runners"), &runners); err != nil {
+	if err := doGet(genApi("/api/v4/runners/all"), &runners); err != nil {
 		exit("doGet all runners failed: " + err.Error())
 		return
 	}
