@@ -4,7 +4,7 @@ k8s-gitlab-runner
 
 ### Usage
 
-docker image: `registry.cn-shenzhen.aliyuncs.com/juxuny-public/k8s-gitlab-runner:v1.1.1`
+docker image: `registry.cn-shenzhen.aliyuncs.com/juxuny-public/k8s-gitlab-runner:v1.1.2`
 
 ```yaml
 ---
@@ -37,7 +37,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: gitlab-runner
-          image: registry.cn-shenzhen.aliyuncs.com/juxuny-public/k8s-gitlab-runner:v1.1.1
+          image: registry.cn-shenzhen.aliyuncs.com/juxuny-public/k8s-gitlab-runner:v1.1.2
           imagePullPolicy: Always
           #securityContext:
           #  privileged: true
